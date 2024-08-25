@@ -47,6 +47,8 @@ class StockIssueController extends Controller
             'account_id' => 'required|uuid',
             'note' => '',
             'created_at' => 'required|date|date_format:Y-m-d',
+        ], [
+            'account_id' => 'Choose one account'
         ]);
 
         $validated['company_id'] = $this->authUserCompany->id;

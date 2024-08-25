@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1/stockissue'], function
     Route::get('/list', [StockIssueController::class, 'index']);
     Route::post('', [StockIssueController::class, 'store']);
     Route::get('/detail', [StockIssueDetailController::class, 'index']);
+    Route::get('/detail/{id}', [StockIssueDetailController::class, 'show']);
     Route::get('/{id}', [StockIssueController::class, 'show']);
     Route::put('/save', [StockIssueController::class, 'update']);
     Route::delete('/delete', [StockIssueController::class, 'destroy']);

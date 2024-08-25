@@ -43,6 +43,9 @@ class StockIssueDetailController extends Controller
             'quantity' => 'required|numeric',
             'note' => '',
             'index' => '',
+        ], [
+            'item_id' => 'Choose one item',
+            'quantity' => 'Quantity field is required'
         ]);
 
         $validated['stock_issue_id'] = $stockIssue->id;
@@ -58,9 +61,12 @@ class StockIssueDetailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, String $id)
     {
-        //
+        $stockIssue = $this->authUserCompany->stockIssues()->findOrFail($request->stockIssue);
+        $stockIssueDetail = $stockIssue->stockIssueDetails()->findOrFail($id);
+
+        return response()->json($stockIssueDetail);
     }
 
     /**

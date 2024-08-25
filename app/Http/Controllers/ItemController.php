@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Models\Item;
-use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ItemController extends Controller
 {
@@ -37,17 +38,9 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ItemRequest $request)
     {
-        $validated = $request->validate([
-            'item_name' => 'required|string',
-            'code' => 'unique:items',
-            'item_group_id' => 'required|uuid',
-            'account_group_id' => 'required|uuid',
-            'unit_id' => 'required|uuid',
-            'is_active' => 'required',
-        ]);
-
+        $validated = $request->validated();
         $validated['company_id'] = $this->authUserCompany->id;
 
         $newItem = Item::create($validated);
@@ -78,23 +71,10 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(ItemRequest $request)
     {
-        $rules = [
-            'item_name' => 'required|string',
-            'item_group_id' => 'required|uuid',
-            'account_group_id' => 'required|uuid',
-            'unit_id' => 'required|uuid',
-            'is_active' => 'required',
-        ];
-
         $item = $this->authUserCompany->items()->findOrFail($request->id);
-
-        if ($item['code'] != $request->input('code')) {
-            $rules['code'] = "unique:items";
-        }
-
-        $validated = $request->validate($rules);
+        $validated = $request->validated();
 
         $validated['company_id'] = $this->authUserCompany->id;
 
